@@ -21,7 +21,11 @@
                "C" 1/2}}
          (build-from-coll ["A" "B" "A" "C" "C" "A" "A"
                            "D" "B" "A" "B" "A" "D" "C"]))
-      "Builds from more complex collection"))
+      "Builds from more complex collection")
+
+  (is (= nil
+         (build-from-coll {:a "A" :b "B" :c "C"}))
+      "Discards non-sequential collections"))
 
 (deftest check-build-from-string
 
