@@ -4,11 +4,12 @@
    The result type is {previous_state {next_state probability}}."
   (:use [markov.reader]))
 
-(defn- create-counts [coll]
+(defn create-counts [order coll]
   "Computes how many times did each 'next state' come from a 'previous state'.
-   The result type is {previous_state {next_state count}}."
-  (let [past    coll
-        present (rest coll)
+  Order must be < (count coll).
+  The result type is {previous_state {next_state count}}."
+  (let [past    (butlast (map vec (partition order 1 coll)))
+        present (drop order coll)
         zipped  (map vector past present)
         sorted  (sort zipped)
         grouped (group-by first sorted)
@@ -35,15 +36,16 @@
                     (seq count-map))]
     (into {} probs)))
 
-(defn build-from-coll [coll]
-  "Computes a transition matrix of a collection."
-  (if (sequential? coll)
-    (create-probs (create-counts coll))))
+(defn build-from-coll [order coll]
+  "Computes a transition matrix of given order from collection."
+  (if (and (sequential? coll)
+           (< order (count coll)))
+    (create-probs (create-counts order coll))))
 
-(defn build-from-string [string]
+(defn build-from-string [order string]
   "Converts string to collection and computes its transition matrix."
-  (build-from-coll (prepare-string string)))
+  (build-from-coll order (prepare-string string)))
 
-(defn build-from-file [filepath]
+(defn build-from-file [order filepath]
   "Reads a file into a collection and computes its transition matrix."
-  (build-from-coll (prepare-file filepath)))
+  (build-from-coll order (prepare-file filepath)))
