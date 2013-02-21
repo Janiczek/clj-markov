@@ -15,7 +15,7 @@ user=> ; (build-from-string [order] string)
 user=> ; (build-from-file   [order] file)
 
 user=> ; Generating a random walk from them
-user=> ; (generate-walk max-length [start-value] probabilities)
+user=> ; (generate-walk [start-value] probabilities)
 ```
 
 Computing the probabilities:
@@ -55,10 +55,22 @@ There can be halting rule: an element that is encountered first time on the end 
 
 ```clojure
 user=> (generate-walk (build-from-string "A B A C A D"))
-("C" "A" "C" "A" "D")
+("C" "A" "C" "A" "D") ; so, if we ever land on D, we end.
 ```
 
-So, if we ever land on D, we end.
+We can give it a starting value(s), if we wish:
+
+```clojure
+user=> (generate-walk "D" (build-from-string "A B A C A D"))
+("D") ; now that was cruel.
+
+user=> (generate-walk "C" (build-from-string "A B A C A D"))
+("C" "A" "C" "A" "C" "A" "C" "A" "C" "A" "C" "A" "C" "A" "B" "A" "D")
+; slightly better ;)
+
+user=> (take 10 (generate-walk [1 2 3] (build-from-coll [4 3 2 1 2 3 2 1 2 1])))
+(1 2 3 2 3 2 1 2 3 2) ; starting values match!
+```
 
 ## TODO
 

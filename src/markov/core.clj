@@ -71,20 +71,22 @@
   ([order filepath] (build-from-coll order (prepare-file filepath))))
 
 (defn generate-walk
-  "Generates a random 'walk' given the probabilities and optional starting values.
-  Needs the order of probability matrix and length of starting collection to match.
+  "Generates a random 'walk' given the transition matrix and (opt.) starting values.
+  If n = higher order transition matrix > 1, needs at least n starting values!
   Can stop when it gets to a state it wasn't trained on!
   For example, ABACAD -> if we ever get to D, we end."
   ([probs] (generate-walk (first (rand-nth (seq probs)))
                               probs))
   ([start probs] 
-   (if (= (type start) clojure.lang.Keyword)
+   (if (not (sequential? start))
      (generate-walk [start] probs)
-     (let [order (count start)]
-       (letfn [(lazy-walk [last-state]
-                 (let [next-state (take-from-probs (get probs last-state))
-                       next-args  (conj (rest last-state) next-state)]
-                   (if (nil? next-state)
-                     nil ; cons _ nil = (_)
-                     (cons next-state (lazy-seq (lazy-walk next-args))))))]
-         (lazy-cat start (lazy-walk start)))))))
+     (let [order (count (first (first (seq probs))))]
+       (if (< (count start) order)
+         nil
+         (letfn [(lazy-walk [last-state]
+                   (let [next-state (take-from-probs (get probs last-state))
+                         next-args  (conj (rest last-state) next-state)]
+                     (if (nil? next-state)
+                       nil ; cons _ nil = (_)
+                       (cons next-state (lazy-seq (lazy-walk next-args))))))]
+           (lazy-cat start (lazy-walk (take-last order start)))))))))
