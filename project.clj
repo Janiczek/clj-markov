@@ -1,4 +1,4 @@
-(defproject markov "0.3.0"
+(defproject janiczek/markov "0.3.0"
   :description "Markov chains in Clojure"
   :url "https://github.com/janiczek/markov"
   :license {:name "Eclipse Public License - v1.0"

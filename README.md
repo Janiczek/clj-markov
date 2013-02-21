@@ -2,6 +2,27 @@
 
 markov is a simple Clojure library for work with Markov chains.
 
+## Installation
+
+If you have Leiningen, it's simple - just add dependency to your project.clj:
+
+```clojure
+[janiczek/markov "0.3.0"]
+```
+
+Then you can `use` it in your namespace:
+
+```clojure
+(ns your.namespace
+  (use [markov.core :as markov]))
+
+; or
+
+(use 'markov.core)
+
+; or whatever :)
+```
+
 ## Usage
 
 For more examples of usage look at `test/markov/core_test.clj`.
@@ -49,7 +70,7 @@ user=> (take 10 (generate-walk (build-from-string "A B A C A A")))
 ("A" "B" "A" "A" "B" "A" "B" "A" "C" "A")
 ```
 
-As you can see, after every B or C there's an A, because when "training" the chain everytime it encountered B, there was A afterwards.
+As you can see, after every B or C there's an A, because when "training" the chain everytime it encountered B or C, there was A afterwards.
 
 There can be halting rule: an element that is encountered first time on the end of the training collection:
 
