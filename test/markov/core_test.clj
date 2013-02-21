@@ -10,6 +10,12 @@
          (build-from-coll 1 ["A" "B" "C" "D"]))
       "Works with order 1")
 
+  (is (= {["A"] {"B" 1}
+          ["B"] {"C" 1}
+          ["C"] {"D" 1}}
+         (build-from-coll ["A" "B" "C" "D"]))
+      "Defaultly has order 1")
+
   (is (= {["A" "B"] {"C" 1}
           ["B" "C"] {"D" 1}}
          (build-from-coll 2 ["A" "B" "C" "D"]))
@@ -70,3 +76,21 @@
           ["C"] {"D" 1}}
          (build-from-file 1 "test/markov/test_file.txt"))
       "Builds from a file"))
+
+(deftest check-generate-walk
+
+  (is (= :a
+         (first (generate-walk :a (build-from-coll [:a :b :c :d :a :b :c :d]))))
+      "If requested, starts with the first element")
+
+  (is (= :a
+         (first (generate-walk [:a] (build-from-coll [:a :b :c :d :a :b :c :d]))))
+      "The starting value can be single element or collection")
+
+  (is (= '(:a :b)
+         (take 2 (generate-walk [:a :b] (build-from-coll [:a :b :c :d :a :b :c]))))
+      "More starting values are possible")
+         
+  (is (= :d
+         (last (generate-walk (build-from-coll [:a :b :a :c :a :d]))))
+      "Halts if gets to state from which it didn't ever continue"))
