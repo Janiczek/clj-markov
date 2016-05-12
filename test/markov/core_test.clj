@@ -90,7 +90,7 @@
   (is (= '(:a :b)
          (take 2 (generate-walk [:a :b] (build-from-coll [:a :b :c :d :a :b :c]))))
       "More starting values are possible")
-         
+
   (is (= :d
          (last (generate-walk (build-from-coll [:a :b :a :c :a :d]))))
       "Halts if gets to state from which it didn't ever continue"))

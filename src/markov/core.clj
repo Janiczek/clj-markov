@@ -77,7 +77,7 @@
   For example, ABACAD -> if we ever get to D, we end."
   ([probs] (generate-walk (first (rand-nth (seq probs)))
                               probs))
-  ([start probs] 
+  ([start probs]
    (if (not (sequential? start))
      (generate-walk [start] probs)
      (let [order (count (first (first (seq probs))))]
