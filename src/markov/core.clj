@@ -77,7 +77,7 @@
   For example, ABACAD -> if we ever get to D, we end."
   ([probs] (generate-walk (first (rand-nth (seq probs)))
                               probs))
-  ([start probs] 
+  ([start probs]
    (if (not (sequential? start))
      (generate-walk [start] probs)
      (let [order (count (first (first (seq probs))))]
@@ -85,7 +85,7 @@
          nil
          (letfn [(lazy-walk [last-state]
                    (let [next-state (take-from-probs (get probs last-state))
-                         next-args  (conj (rest last-state) next-state)]
+                         next-args  (conj (vec (rest last-state)) next-state)]
                      (if (nil? next-state)
                        nil ; cons _ nil = (_)
                        (cons next-state (lazy-seq (lazy-walk next-args))))))]
