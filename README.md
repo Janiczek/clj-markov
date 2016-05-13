@@ -7,7 +7,7 @@ markov is a simple Clojure library for work with Markov chains.
 If you have Leiningen, it's simple - just add dependency to your project.clj:
 
 ```clojure
-[janiczek/markov "0.4.0"]
+[janiczek/markov "0.3.1"]
 ```
 
 Then you can `use` it in your namespace:
